@@ -200,14 +200,53 @@
 //version: 5
 //DiceRoller-3 MyTry:
 
+//function rollDice() {
+//    const args = process.argv.slice(2);
+//    const dicePattern = /^(\d+)d(\d+)([+-]\d+)?$/i;
+//    const match = args[0].match(dicePattern);
+//    if (args.length !== 1) {
+//        console.log("❌ Invalid input! Use format: (e.g., 3d6, 1d20+5, 2d8-3).\n");
+//        process.exit(1);
+//    }
+//    if (!match) {
+//        console.error("❌ Invalid input! Use format: (e.g., 3d6, 1d20+5, 2d8-3).\n");
+//        process.exit(1);
+//    }
+
+//    let quantity = parseInt(match[1], 10);
+//    let size = parseInt(match[2], 10);
+//    let bonus = match[3] ? parseInt(match[3], 10) : 0;
+
+
+//    if (quantity <= 0 || size <= 0) {
+//        console.error("❌ Dice quantity and size must be greater than 0.\n");
+//        process.exit(1);
+//    }
+
+//    let rolls = Array.from({ length: quantity }, () => Math.floor(Math.random() * size) + 1);
+//    let sum = 0;
+//    for (let i = 0; i < rolls.length; i++) {
+//        sum += rolls[i];
+//    }
+//    let finalTotal = sum + bonus;
+
+//    console.log(`🎲 Rolls: [${rolls.join(", ")}] ➝ Sum: ${sum}${bonus ? (bonus > 0 ? ` + ${bonus}` : ` - ${Math.abs(bonus)}`) : ""} ➝ ✨ Final Total: ${finalTotal}`);
+//}
+
+
+
+
+
+//version: 6:
+//One that I sort of understand:
+
+
 function rollDice() {
     const args = process.argv.slice(2);
     const dicePattern = /^(\d+)d(\d+)([+-]\d+)?$/i;
-    const match = args[0].match(dicePattern);
-    if (args.length !== 1) {
-        console.log("❌ Invalid input! Use format: (e.g., 3d6, 1d20+5, 2d8-3).\n");
-        process.exit(1);
-    }
+
+    // Ensure exactly 1 argument & that it matches the dice pattern
+    const match = args.length === 1 ? args[0]?.match(dicePattern) : null;
     if (!match) {
         console.error("❌ Invalid input! Use format: (e.g., 3d6, 1d20+5, 2d8-3).\n");
         process.exit(1);
@@ -217,19 +256,23 @@ function rollDice() {
     let size = parseInt(match[2], 10);
     let bonus = match[3] ? parseInt(match[3], 10) : 0;
 
-
     if (quantity <= 0 || size <= 0) {
         console.error("❌ Dice quantity and size must be greater than 0.\n");
         process.exit(1);
     }
 
+    // Generate random rolls
     let rolls = Array.from({ length: quantity }, () => Math.floor(Math.random() * size) + 1);
+
+    // Calculate sum using for...of loop
     let sum = 0;
-    for (let i = 0; i < rolls.length; i++) {
-        sum += rolls[i];
+    for (let roll of rolls) {
+        sum += roll;
     }
     let finalTotal = sum + bonus;
 
+    // Output results
     console.log(`🎲 Rolls: [${rolls.join(", ")}] ➝ Sum: ${sum}${bonus ? (bonus > 0 ? ` + ${bonus}` : ` - ${Math.abs(bonus)}`) : ""} ➝ ✨ Final Total: ${finalTotal}`);
 }
 
+rollDice();  // Ensure the function runs when script is executed
